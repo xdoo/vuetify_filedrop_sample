@@ -20,24 +20,24 @@
     </v-app-bar>
 
     <v-content>
-      <HelloWorld/>
+      <file-drop/>
     </v-content>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import Vue from "vue"
+import { Component } from "vue-property-decorator"
 
-export default Vue.extend({
-  name: 'App',
+// components
+import FileDrop from "@/components/FileDrop.vue"
 
+@Component({
   components: {
-    HelloWorld,
-  },
+    FileDrop
+  }
+})
+export default class App extends Vue {
 
-  data: () => ({
-    //
-  }),
-});
+}
 </script>
