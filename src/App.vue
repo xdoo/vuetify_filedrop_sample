@@ -9,18 +9,19 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-icon title="blubbber...">mdi-flask-outline</v-icon>
     </v-app-bar>
 
     <v-content>
-      <file-drop/>
+      <v-container fill-height>
+        <v-row>
+          <v-col cols="2"></v-col>
+          <v-col cols="8">
+            <file-drop v-on:files-selected="logFiles"></file-drop>
+          </v-col>
+          <v-col cols="2"></v-col>
+        </v-row>
+      </v-container>
     </v-content>
   </v-app>
 </template>
@@ -38,6 +39,16 @@ import FileDrop from "@/components/FileDrop.vue"
   }
 })
 export default class App extends Vue {
+
+  /**
+   * called from upload event
+   */
+  logFiles(fileList: FileList) {
+    for(const item of fileList) {
+      // eslint-disable-next-line
+      console.log(item.name)
+    }
+  }
 
 }
 </script>

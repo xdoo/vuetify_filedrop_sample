@@ -16,7 +16,7 @@
       class="pa-2"
     >
       <v-col class="indigo--text text--darken-2">
-        <v-row justify="center" v-if="!loading">
+        <v-row justify="center">
           <v-icon
             v-if="!dragover" 
             color="indigo darken-2" 
@@ -28,19 +28,8 @@
             size="50"
             >mdi-book-plus</v-icon>
         </v-row>
-        <v-row justify="center" v-if="!loading">
+        <v-row justify="center">
           <span class="title">Drop your file here, or click for selection dialog!</span>
-        </v-row>
-        <v-row justify="center" v-if="loading">
-          <v-progress-circular
-            size="50"
-            width="15"
-            color="indigo darken-2"
-            indeterminate
-          ></v-progress-circular>
-        </v-row>
-        <v-row justify="center" v-if="loading">
-          <span class="title">Datei wird verarbeitet</span>
         </v-row>
       </v-col>
     </v-sheet>
@@ -48,13 +37,13 @@
 </template>
 <script lang="ts">
 import Vue from "vue"
-import { Component } from "vue-property-decorator"
+import { Component, Emit } from "vue-property-decorator"
 
 @Component
 export default class FileDrop extends Vue{
   
+  // internal properties
   file: File[] = new Array<File>()
-  loading: boolean = false
   formUpload: boolean = false
   dragover: boolean = false
   
@@ -69,7 +58,7 @@ export default class FileDrop extends Vue{
       fileupload.addEventListener("change", e => {
         const target = (e.target as HTMLInputElement)
         if(target.files) {
-          this.onFilesSelected(target.files)
+          this.filesSelected(target.files)
         }
       })
     }
@@ -91,7 +80,7 @@ export default class FileDrop extends Vue{
       dropzone.addEventListener("drop", e => {
         e.preventDefault()
         if(e.dataTransfer) {
-          this.onFilesSelected(e.dataTransfer.files)
+          this.filesSelected(e.dataTransfer.files)
         }
       })
 
@@ -113,13 +102,11 @@ export default class FileDrop extends Vue{
   }
 
   /**
-   * upload magic...
+   * upload event...
    */
-  onFilesSelected(fileList: FileList) {
-    for(const entry of fileList) {
-      // eslint-disable-next-line
-      console.log(entry.name)
-    }
+  @Emit()
+  filesSelected(fileList: FileList) {
+    this.dragover = false
   }
 }
 </script>
