@@ -8,7 +8,7 @@
     <v-sheet
       id="dropzone"
       tabindex="0"
-      title="Klicken Sie hier, um eine Datei von Ihrem Rechner auszuwählen."
+      title="Click to grap a file from your PC!"
       color="indigo lighten-4"
       width="100%"
       style="cursor:pointer;border-style: solid;border-width: 4px;border-color: #303F9F;"
@@ -52,6 +52,66 @@ import { Component } from "vue-property-decorator"
 
 @Component
 export default class FileDrop extends Vue{
-    
+  
+  file: File[] = new Array<File>()
+  loading: boolean = false
+  formUpload: boolean = false
+  dragover: boolean = false
+  
+  mounted () {
+     const dropzone = document.getElementById("dropzone")
+    const fileupload = document.getElementById("fileUpload")
+    if(fileupload) {
+      fileupload.addEventListener("change", e => {
+        const target = (e.target as HTMLInputElement)
+        if(target.files) {
+          this.onFilesSelected(target.files)
+        }
+      })
+    }
+    if(dropzone) {
+      // register all drag & drop event listeners
+      dropzone.addEventListener("dragenter", e => {
+        this.dragover = true
+      })
+      dropzone.addEventListener("dragleave", e => {
+        e.preventDefault()
+        this.dragover = false
+      })
+      dropzone.addEventListener("dragover", e => {
+        e.preventDefault()
+        this.dragover = true
+      })
+      dropzone.addEventListener("drop", e => {
+        e.preventDefault()
+        if(e.dataTransfer) {
+          this.onFilesSelected(e.dataTransfer.files)
+        }
+      })
+
+      // register event listener for keyboard usage
+      dropzone.addEventListener("click", e => {
+        if(fileupload) {
+          fileupload.click()
+        }
+        e.preventDefault()
+      })
+      dropzone.addEventListener("keypress", e => {
+        if (e.key === "Enter") {
+          if(fileupload)
+            fileupload.click()
+        }
+        e.preventDefault()
+      })
+    }
+  }
+
+  /**
+   * Datei Upload per drag & drop
+   */
+  onFilesSelected(fileList: FileList) {
+    const files: File[] = new Array<File>()
+
+  }
 }
 </script>
