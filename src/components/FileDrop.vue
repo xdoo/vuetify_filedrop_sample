@@ -59,8 +59,12 @@ export default class FileDrop extends Vue{
   dragover: boolean = false
   
   mounted () {
-     const dropzone = document.getElementById("dropzone")
+    // to register listeners, we have to know the 
+    // html elements
+    const dropzone = document.getElementById("dropzone")
     const fileupload = document.getElementById("fileUpload")
+
+    // register listeners on the file input
     if(fileupload) {
       fileupload.addEventListener("change", e => {
         const target = (e.target as HTMLInputElement)
@@ -69,6 +73,8 @@ export default class FileDrop extends Vue{
         }
       })
     }
+
+    // register listeners on yoour dropzone / v-sheet
     if(dropzone) {
       // register all drag & drop event listeners
       dropzone.addEventListener("dragenter", e => {
@@ -107,11 +113,13 @@ export default class FileDrop extends Vue{
   }
 
   /**
-   * Datei Upload per drag & drop
+   * upload magic...
    */
   onFilesSelected(fileList: FileList) {
-    const files: File[] = new Array<File>()
-
+    for(const entry of fileList) {
+      // eslint-disable-next-line
+      console.log(entry.name)
+    }
   }
 }
 </script>
