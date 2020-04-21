@@ -15,8 +15,10 @@
       height="200"
       class="pa-2"
     >
-      <v-col class="indigo--text text--darken-2">
-        <v-row justify="center">
+      <v-col 
+        align-self="center"
+        class="indigo--text text--darken-2">
+        <v-row justify="center" align="end">
           <v-icon
             v-if="!dragover" 
             color="indigo darken-2" 
@@ -29,7 +31,7 @@
             >mdi-book-plus</v-icon>
         </v-row>
         <v-row justify="center">
-          <span class="title">Drop your file here, or click for selection dialog!</span>
+          <span class="title">Drop your file here, or click for file selection dialog!</span>
         </v-row>
       </v-col>
     </v-sheet>
@@ -63,10 +65,11 @@ export default class FileDrop extends Vue{
       })
     }
 
-    // register listeners on yoour dropzone / v-sheet
+    // register listeners on your dropzone / v-sheet
     if(dropzone) {
       // register all drag & drop event listeners
       dropzone.addEventListener("dragenter", e => {
+        e.preventDefault()
         this.dragover = true
       })
       dropzone.addEventListener("dragleave", e => {
@@ -86,17 +89,17 @@ export default class FileDrop extends Vue{
 
       // register event listener for keyboard usage
       dropzone.addEventListener("click", e => {
+        e.preventDefault()
         if(fileupload) {
           fileupload.click()
         }
-        e.preventDefault()
       })
       dropzone.addEventListener("keypress", e => {
+        e.preventDefault()
         if (e.key === "Enter") {
           if(fileupload)
             fileupload.click()
         }
-        e.preventDefault()
       })
     }
   }
