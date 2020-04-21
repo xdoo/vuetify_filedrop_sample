@@ -45,7 +45,6 @@ import { Component, Emit } from "vue-property-decorator"
 export default class FileDrop extends Vue{
   
   // internal properties
-  file: File[] = new Array<File>()
   formUpload: boolean = false
   dragover: boolean = false
   
