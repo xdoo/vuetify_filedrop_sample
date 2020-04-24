@@ -1,41 +1,37 @@
-<template>
-  <div>
-    <input 
-      id="fileUpload"
-      type="file" 
-      accept="text/xml" 
-      style="display:none"/>
+<template>   
     <v-sheet
       id="dropzone"
+      ref="dzone"
       tabindex="0"
       title="Click to grap a file from your PC!"
       color="indigo lighten-4"
       width="100%"
-      style="cursor:pointer;border-style: solid;border-width: 4px;border-color: #303F9F;"
+      style="cursor:pointer;"
       height="200"
       class="pa-2"
     >
-      <v-col 
-        align-self="center"
-        class="indigo--text text--darken-2">
-        <v-row justify="center" align="end">
-          <v-icon
-            v-if="!dragover" 
-            color="indigo darken-2" 
-            size="50"
-            >mdi-cloud-upload-outline</v-icon>
-          <v-icon
-            v-if="dragover" 
-            color="indigo darken-2" 
-            size="50"
-            >mdi-book-plus</v-icon>
-        </v-row>
-        <v-row justify="center">
-          <span class="title">Drop your file here, or click for file selection dialog!</span>
-        </v-row>
-      </v-col>
+      <input 
+        ref="upload"
+        id="fileUpload"
+        type="file" 
+        accept="text/xml" 
+        style="display:none"/>
+      <v-row justify="center">
+        <v-icon
+          v-if="!dragover" 
+          color="indigo darken-2" 
+          size="75"
+        >mdi-cloud-upload-outline</v-icon>
+        <v-icon
+          v-if="dragover" 
+          color="indigo darken-2" 
+          size="75"
+        >mdi-book-plus</v-icon>
+      </v-row>
+      <v-row justify="center">
+        <span class="title indigo--text text--darken-2">Drag'n drop or click to upload file!</span>
+      </v-row>
     </v-sheet>
-  </div>
 </template>
 <script lang="ts">
 import Vue from "vue"
@@ -51,18 +47,8 @@ export default class FileDrop extends Vue{
   mounted () {
     // to register listeners, we have to know the 
     // html elements
-    const dropzone = document.getElementById("dropzone")
-    const fileupload = document.getElementById("fileUpload")
-
-    // register listeners on the file input
-    if(fileupload) {
-      fileupload.addEventListener("change", e => {
-        const target = (e.target as HTMLInputElement)
-        if(target.files) {
-          this.filesSelected(target.files)
-        }
-      })
-    }
+    const dropzone = this.$el
+    const fileupload = this.$el.firstElementChild as HTMLElement
 
     // register listeners on your dropzone / v-sheet
     if(dropzone) {
@@ -81,8 +67,9 @@ export default class FileDrop extends Vue{
       })
       dropzone.addEventListener("drop", e => {
         e.preventDefault()
-        if(e.dataTransfer) {
-          this.filesSelected(e.dataTransfer.files)
+        const dragevent = e as DragEvent
+        if(dragevent.dataTransfer) {
+          this.filesSelected(dragevent.dataTransfer.files)
         }
       })
 
@@ -95,11 +82,22 @@ export default class FileDrop extends Vue{
       })
       dropzone.addEventListener("keypress", e => {
         e.preventDefault()
-        if (e.key === "Enter") {
+        const keyEvent = e as KeyboardEvent
+        if (keyEvent.key === "Enter") {
           if(fileupload)
             fileupload.click()
         }
       })
+
+      // register listeners on the file input
+      if(fileupload) {
+        fileupload.addEventListener("change", e => {
+          const target = (e.target as HTMLInputElement)
+          if(target.files) {
+            this.filesSelected(target.files)
+          }
+        })
+    }
     }
   }
 
