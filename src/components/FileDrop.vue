@@ -8,12 +8,12 @@
       color="indigo lighten-4"
       width="100%"
       class="pa-2"
-      @dragenter.prevent="dragover = true"
-      @dragover.prevent="dragover = true"
-      @dragleave.prevent="dragover = false"
-      @drop.prevent="dropEvent"
-      @click.prevent="$refs.upload.click()"
-      @keypress.enter.prevent="$refs.upload.click()"
+      @dragenter="dragover = true"
+      @dragover="dragover = true"
+      @dragleave="dragover = false"
+      @drop="dropEvent"
+      @click="$refs.upload.click()"
+      @keypress.enter="$refs.upload.click()"
     >
       <v-row justify="center" class="mx-5 mt-5">
         <v-icon
