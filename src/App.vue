@@ -16,7 +16,7 @@
       <v-container fill-height>
         <v-row justify="center">
           <v-col cols="8">
-            <file-drop @value="logFiles"></file-drop>
+            <file-drop @input="logFiles"></file-drop>
           </v-col>
           <v-col cols="12" :key="file.name" v-for="(file, index) in fileList"
                  class="text-center"

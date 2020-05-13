@@ -86,7 +86,7 @@ export default class FileDrop extends Vue {
     /**
      * upload event...
      */
-    @Emit('value')
+    @Emit('input')
     filesSelected(fileList: FileList) {
         this.dragover = false
         return fileList;
