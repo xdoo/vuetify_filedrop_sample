@@ -15,7 +15,7 @@
       @click.prevent="$refs.upload.click()"
       @keypress.enter.prevent="$refs.upload.click()"
     >
-      <v-row justify="center" class="mx-5">
+      <v-row justify="center" class="mx-5 mt-5">
         <v-icon
           v-if="!dragover"
           color="indigo darken-2"
@@ -29,7 +29,7 @@
         >mdi-book-plus
         </v-icon>
       </v-row>
-      <v-row justify="center" class="mx-5">
+      <v-row justify="center" class="mx-5 mb-5">
         <span class="title indigo--text text--darken-2">Drag'n drop or click to upload file!</span>
       </v-row>
     </v-sheet>
