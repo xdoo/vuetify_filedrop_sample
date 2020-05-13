@@ -1,4 +1,5 @@
-<template>   
+<template>
+  <div>
     <v-sheet
       id="dropzone"
       ref="dzone"
@@ -6,107 +7,89 @@
       title="Click to grap a file from your PC!"
       color="indigo lighten-4"
       width="100%"
-      style="cursor:pointer;"
-      height="200"
       class="pa-2"
+      @dragenter.prevent="dragover = true"
+      @dragover.prevent="dragover = true"
+      @dragleave.prevent="dragover = false"
+      @drop.prevent="dropEvent"
+      @click.prevent="$refs.upload.click()"
+      @keypress.enter.prevent="$refs.upload.click()"
     >
-      <input 
-        ref="upload"
-        id="fileUpload"
-        type="file" 
-        accept="text/xml" 
-        style="display:none"/>
-      <v-row justify="center">
+      <v-row justify="center" class="mx-5">
         <v-icon
-          v-if="!dragover" 
-          color="indigo darken-2" 
+          v-if="!dragover"
+          color="indigo darken-2"
           size="75"
-        >mdi-cloud-upload-outline</v-icon>
+        >mdi-cloud-upload-outline
+        </v-icon>
         <v-icon
-          v-if="dragover" 
-          color="indigo darken-2" 
+          v-if="dragover"
+          color="indigo darken-2"
           size="75"
-        >mdi-book-plus</v-icon>
+        >mdi-book-plus
+        </v-icon>
       </v-row>
-      <v-row justify="center">
+      <v-row justify="center" class="mx-5">
         <span class="title indigo--text text--darken-2">Drag'n drop or click to upload file!</span>
       </v-row>
     </v-sheet>
+    <input
+      ref="upload"
+      id="fileUpload"
+      type="file"
+      :multiple="multiple"
+      @change="changeEvent"
+      :accept="accept"
+      style=""/>
+  </div>
 </template>
+
+<style scoped>
+  #dropzone {
+    cursor: pointer;
+  }
+
+  #fileUpload {
+    display: none;
+  }
+</style>
+
 <script lang="ts">
 import Vue from "vue"
-import { Component, Emit } from "vue-property-decorator"
+import {Component, Emit, Prop} from "vue-property-decorator"
 
 @Component
-export default class FileDrop extends Vue{
-  
-  // internal properties
-  formUpload: boolean = false
-  dragover: boolean = false
-  
-  mounted () {
-    // to register listeners, we have to know the 
-    // html elements
-    const dropzone = this.$el
-    const fileupload = this.$el.firstElementChild as HTMLElement
+export default class FileDrop extends Vue {
 
-    // register listeners on your dropzone / v-sheet
-    if(dropzone) {
-      // register all drag & drop event listeners
-      dropzone.addEventListener("dragenter", e => {
-        e.preventDefault()
-        this.dragover = true
-      })
-      dropzone.addEventListener("dragleave", e => {
-        e.preventDefault()
-        this.dragover = false
-      })
-      dropzone.addEventListener("dragover", e => {
-        e.preventDefault()
-        this.dragover = true
-      })
-      dropzone.addEventListener("drop", e => {
-        e.preventDefault()
-        const dragevent = e as DragEvent
-        if(dragevent.dataTransfer) {
-          this.filesSelected(dragevent.dataTransfer.files)
-        }
-      })
+    @Prop({type: String, default: () => ""})
+    accept!: string
 
-      // register event listener for keyboard usage
-      dropzone.addEventListener("click", e => {
-        e.preventDefault()
-        if(fileupload) {
-          fileupload.click()
-        }
-      })
-      dropzone.addEventListener("keypress", e => {
-        e.preventDefault()
-        const keyEvent = e as KeyboardEvent
-        if (keyEvent.key === "Enter") {
-          if(fileupload)
-            fileupload.click()
-        }
-      })
+    @Prop({type: Boolean, default: () => false})
+    multiple!: boolean
 
-      // register listeners on the file input
-      if(fileupload) {
-        fileupload.addEventListener("change", e => {
-          const target = (e.target as HTMLInputElement)
-          if(target.files) {
+    // internal properties
+    dragover: boolean = false
+
+    changeEvent(e: Event) {
+        const target = (e.target as HTMLInputElement)
+        if (target.files) {
             this.filesSelected(target.files)
-          }
-        })
+        }
     }
-    }
-  }
 
-  /**
-   * upload event...
-   */
-  @Emit()
-  filesSelected(fileList: FileList) {
-    this.dragover = false
-  }
+    dropEvent(dragevent: DragEvent) {
+        if (dragevent.dataTransfer) {
+            this.filesSelected(dragevent.dataTransfer.files)
+        }
+    }
+
+    /**
+     * upload event...
+     */
+    @Emit('value')
+    filesSelected(fileList: FileList) {
+        this.dragover = false
+        return fileList;
+    }
 }
 </script>
