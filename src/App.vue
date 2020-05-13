@@ -14,12 +14,10 @@
 
     <v-content>
       <v-container fill-height>
-        <v-row>
-          <v-col cols="2"></v-col>
+        <v-row justify="center">
           <v-col cols="8">
             <file-drop @value="logFiles"></file-drop>
           </v-col>
-          <v-col cols="2"></v-col>
           <v-col cols="12" :key="file.name" v-for="(file, index) in fileList"
                  class="text-center"
           >{{index + 1}}: {{file.name}}</v-col>
